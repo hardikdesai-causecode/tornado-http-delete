@@ -35,7 +35,7 @@ class TestHandler(AsyncHTTPTestCase):
 
     def test_delete_request(self):
         # Example on how to hit a particular handler as DELETE request.
-        # In this example, we want to test the response code,
+        # In this example, we want to test the redirect,
         post_args = {'name': 'Hardik', 'age': '22'}
         response = self.fetch(
             '/',
@@ -44,6 +44,27 @@ class TestHandler(AsyncHTTPTestCase):
             follow_redirects=True)
 
         self.assertEqual(response.code, 200)
+
+class TestOrg(AsyncHTTPTestCase):
+    def get_app(self):
+        return handlers.make_app()
+
+    def test_get_request(self):
+        response = self.fetch(
+            '/uid/{}/org/'.format('12345'),
+            method='GET',
+            follow_redirects=True)
+
+        self.assertEqual(response.code, 200)
+
+    def test_delete_request(self):
+        response = self.fetch(
+            '/uid/{}/org/{}'.format('12345','54321'),
+            method='DELETE',
+            follow_redirects=True)
+
+        self.assertEqual(response.code, 200)
+
 
 if __name__ == "__main__":
     unittest.main()
